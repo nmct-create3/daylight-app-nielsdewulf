@@ -264,6 +264,8 @@ input::placeholder {
     ---
     Website main logo
 */
+.is-loaded {
+}
 
 .c-logo {
 	display: flex;
@@ -301,7 +303,21 @@ input::placeholder {
 	flex-direction: column;
 	justify-content: space-between;
 	height: 100vh;
+	transition: opacity 2s;
+	/* animation: fadeIn 2s ease; */
+	opacity: 0;
 }
+.is-loaded .c-app {
+	opacity: 1;
+}
+/* @keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+} */
 .c-app__summary {
 	font-size: 28px;
 	line-height: 40px;
@@ -334,14 +350,19 @@ input::placeholder {
 	position: relative;
 	height: 100%;
 }
+.is-loaded .c-horizon__sun {
+	transform: translateY(22px);
+}
 .c-horizon__sun {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	transform: translateY(40px);
 	width: 40px;
-	transform: translateY(22px);
+	/* transform: translateY(22px); */
+	transition: transform 3s ease, opacity 0.7s ease;
 }
 .c-horizon__sun::before {
 	content: attr(data-time);

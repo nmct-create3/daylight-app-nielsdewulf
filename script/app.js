@@ -1,3 +1,5 @@
+let now;
+let timer;
 // _ = helper functions
 function _parseMillisecondsIntoReadableTime(timestamp) {
 	//Get hours from milliseconds
@@ -28,7 +30,9 @@ let placeSunAndStartMoving = (sunriseTimestamp, sunsetTimestamp) => {
 	// Anders kunnen we huidige waarden evalueren en de zon updaten via de updateSun functie.
 	// PS.: vergeet weer niet om het resterend aantal minuten te updaten en verhoog het aantal verstreken minuten.
 	// console.log(totalMinutes, sunrise);
+
 	let now = new Date();
+	//now.setMinutes(now.getMinutes() + 1);
 	let sunset = new Date(sunsetTimestamp * 1000);
 	let sunrise = new Date(sunriseTimestamp * 1000);
 
@@ -49,10 +53,16 @@ let placeSunAndStartMoving = (sunriseTimestamp, sunsetTimestamp) => {
 	sun.style.left = `${x}%`;
 
 	if (percentagePassed < 0 || percentagePassed > 100) {
-		document.documentElement.classList = ['is-night'];
+		document.documentElement.classList.remove('is-day');
+		document.documentElement.classList.add('is-night');
 		document.querySelector('.js-time-left').innerHTML = 0;
+		if (percentagePassed > 100) {
+			sun.style.opacity = '0';
+			clearInterval(timer);
+		}
 	} else {
-		document.documentElement.classList = ['is-day'];
+		document.documentElement.classList.add('is-day');
+		document.documentElement.classList.remove('is-night');
 		document.querySelector('.js-time-left').innerHTML = diffMinutes;
 	}
 };
@@ -68,8 +78,11 @@ let showResult = queryResponse => {
 	document.querySelector('.js-location').innerHTML = `${queryResponse.city.name}, ${queryResponse.city.country}`;
 	document.querySelector('.js-sunrise').innerHTML = _parseMillisecondsIntoReadableTime(queryResponse.city.sunrise);
 	document.querySelector('.js-sunset').innerHTML = _parseMillisecondsIntoReadableTime(queryResponse.city.sunset);
+
+	now = new Date(queryResponse.city.sunrise * 1000);
 	placeSunAndStartMoving(queryResponse.city.sunrise, queryResponse.city.sunset);
-	setInterval(() => placeSunAndStartMoving(queryResponse.city.sunrise, queryResponse.city.sunset), 60 * 1000);
+	timer = setInterval(() => placeSunAndStartMoving(queryResponse.city.sunrise, queryResponse.city.sunset), 60 * 1000); //60 * 1000
+	document.documentElement.classList.add('is-loaded');
 };
 
 // 2 Aan de hand van een longitude en latitude gaan we de yahoo wheater API ophalen.
