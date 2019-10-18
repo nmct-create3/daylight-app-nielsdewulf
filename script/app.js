@@ -32,7 +32,7 @@ let placeSunAndStartMoving = (sunriseTimestamp, sunsetTimestamp) => {
 	// console.log(totalMinutes, sunrise);
 
 	let now = new Date();
-	//now.setMinutes(now.getMinutes() + 1);
+	// now.setMinutes(now.getMinutes() + 1);
 	let sunset = new Date(sunsetTimestamp * 1000);
 	let sunrise = new Date(sunriseTimestamp * 1000);
 
@@ -42,7 +42,8 @@ let placeSunAndStartMoving = (sunriseTimestamp, sunsetTimestamp) => {
 	let totalTime = new Date(sunset.getTime() - sunrise.getTime());
 	let totalMinutes = Math.round(totalTime / 60000);
 	let percentagePassed = 100 - (diffMinutes / totalMinutes) * 100;
-	let y = -0.04 * Math.pow(percentagePassed, 2) + 4 * percentagePassed - 2e-13;
+	// let y = -0.04 * Math.pow(percentagePassed, 2) + 4 * percentagePassed - 2e-13;
+	let y = Math.sqrt(Math.pow(50, 2) - Math.pow(percentagePassed - 50, 2)) * 2;
 	let x = percentagePassed;
 	console.log(totalMinutes, diffMinutes, percentagePassed, y);
 
@@ -81,7 +82,7 @@ let showResult = queryResponse => {
 
 	now = new Date(queryResponse.city.sunrise * 1000);
 	placeSunAndStartMoving(queryResponse.city.sunrise, queryResponse.city.sunset);
-	timer = setInterval(() => placeSunAndStartMoving(queryResponse.city.sunrise, queryResponse.city.sunset), 60 * 1000); //60 * 1000
+	timer = setInterval(() => placeSunAndStartMoving(queryResponse.city.sunrise, queryResponse.city.sunset), 60000); //60 * 1000
 	document.documentElement.classList.add('is-loaded');
 };
 
